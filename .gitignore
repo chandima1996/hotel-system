@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment Variables (ගොඩක් වැදගත් - Secret Keys යවන්න එපා)
+.env
+.env.local
+client/.env
+client/.env.local
+server/.env
+
+# Build Outputs
+dist/
+build/
+client/dist/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
