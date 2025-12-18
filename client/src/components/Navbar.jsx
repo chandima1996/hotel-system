@@ -1,104 +1,89 @@
-import { useState } from "react";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/clerk-react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Hotel } from "lucide-react";
-import { Button } from "@/components/ui/button"; // shadcn Button එක
+import { Hotel, Sun, Moon, Globe } from "lucide-react";
+import { ThemeContext } from "../context/ThemeContext";
+import { CurrencyContext } from "../context/CurrencyContext";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { darkMode, toggleTheme } = useContext(ThemeContext);
+  const { currency, toggleCurrency } = useContext(CurrencyContext);
 
   return (
-    <nav className="fixed top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-lg">
-      <div className="flex items-center justify-between px-6 py-4 mx-auto max-w-7xl">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          <div className="p-2 rounded-lg bg-primary/20">
-            <Hotel className="w-6 h-6 text-primary" />
+    <div className="w-full h-20 bg-white/80 dark:bg-black/20 backdrop-blur-md border-b border-gray-200 dark:border-white/10 fixed top-0 left-0 z-50 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+        {/* 1. Logo Section */}
+        <Link to="/" className="flex items-center gap-2 group">
+          <div className="p-2 bg-gradient-to-tr from-blue-600 to-blue-400 dark:from-accent dark:to-blue-600 rounded-xl group-hover:scale-105 transition-transform shadow-lg shadow-blue-500/20 dark:shadow-accent/20">
+            <Hotel className="text-white w-6 h-6" />
           </div>
-          <span className="text-2xl font-extrabold tracking-tight">ORRIO</span>
+          <span className="self-center text-2xl font-bold whitespace-nowrap text-blue-900 dark:text-white tracking-wide">
+            ORRIO
+          </span>
         </Link>
 
-        {/* Mobile Menu Toggle */}
-        <div className="md:hidden">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </Button>
-        </div>
-
-        {/* Desktop Links */}
-        <div className="items-center hidden gap-8 md:flex">
+        {/* 2. Middle Links (New Links Added) */}
+        <div className="hidden md:flex items-center gap-8 font-medium">
           <Link
             to="/"
-            className="text-sm font-medium transition-colors hover:text-primary"
+            className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-primary transition-colors"
           >
             Home
           </Link>
           <Link
             to="/hotels"
-            className="text-sm font-medium transition-colors hover:text-primary"
+            className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-primary transition-colors"
           >
             Find Hotels
           </Link>
           <Link
-            to="/offers"
-            className="text-sm font-medium transition-colors hover:text-primary"
+            to="/about"
+            className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-primary transition-colors"
           >
-            Offers
+            About
+          </Link>
+          <Link
+            to="/contact"
+            className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-primary transition-colors"
+          >
+            Contact
           </Link>
         </div>
 
-        {/* Auth Buttons */}
-        <div className="items-center hidden gap-4 md:flex">
-          <SignedOut>
-            <SignInButton mode="modal">
-              {/* shadcn Button එක පාවිච්චි කරන විදිය */}
-              <Button variant="default" className="font-bold">
-                Sign In
-              </Button>
-            </SignInButton>
-          </SignedOut>
+        {/* 3. Action Buttons (Theme, Currency, Auth) */}
+        <div className="flex items-center gap-4">
+          {/* Currency Toggle */}
+          <button
+            onClick={toggleCurrency}
+            className="flex items-center gap-1 text-sm font-bold text-gray-700 dark:text-white hover:text-blue-600 dark:hover:text-primary transition-colors"
+          >
+            <Globe className="w-4 h-4" />
+            {currency}
+          </button>
 
-          <SignedIn>
-            <UserButton
-              appearance={{
-                elements: { avatarBox: "w-9 h-9 border-2 border-primary" },
-              }}
-            />
-          </SignedIn>
-        </div>
-      </div>
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full bg-gray-100 dark:bg-white/10 text-gray-800 dark:text-yellow-400 hover:bg-gray-200 dark:hover:bg-white/20 transition-all"
+          >
+            {darkMode ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5 text-blue-900" />
+            )}
+          </button>
 
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="p-4 space-y-4 border-b md:hidden bg-background border-border">
-          <Link to="/" className="block text-sm font-medium">
-            Home
-          </Link>
-          <Link to="/hotels" className="block text-sm font-medium">
-            Find Hotels
-          </Link>
-          <div className="pt-4">
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button className="w-full">Sign In</Button>
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
+          {/* Auth Buttons */}
+          <div className="hidden md:flex gap-2">
+            <button className="text-blue-900 dark:text-white px-4 py-2 text-sm font-medium hover:bg-blue-50 dark:hover:bg-white/10 rounded-lg transition-colors">
+              Login
+            </button>
+            <button className="bg-blue-600 dark:bg-white text-white dark:text-black px-4 py-2 text-sm font-bold rounded-lg hover:bg-blue-700 dark:hover:bg-gray-200 transition-colors">
+              Register
+            </button>
           </div>
         </div>
-      )}
-    </nav>
+      </div>
+    </div>
   );
 };
 
